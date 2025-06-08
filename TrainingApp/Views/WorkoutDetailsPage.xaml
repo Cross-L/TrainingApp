@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:Name="RootPage"
+    x:TypeArguments="viewmodels:WorkoutDetailsViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    x:Class="TrainingApp.Views.WorkoutDetailsPage"
+    Title="Деталі тренування"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+        <Color x:Key="ButtonTextColor">#FFFFFF</Color>
+        <Color x:Key="CardBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="ButtonBackgroundColor">#4CAF50</Color>
+        <Color x:Key="SmallButtonBackgroundColor">#555555</Color>
+        <Color x:Key="CancelButtonBackgroundColor">#B71C1C</Color>
+        <Color x:Key="HeaderTextColor">#FFFFFF</Color>
+        <Color x:Key="SubHeaderTextColor">#AAAAAA</Color>
+        <Color x:Key="OpenButtonBackgroundColor">#2196F3</Color> 
+
+        <Style x:Key="DividerStyle" TargetType="BoxView">
+            <Setter Property="HeightRequest" Value="1" />
+            <Setter Property="BackgroundColor" Value="{StaticResource DividerColor}" />
+            <Setter Property="Margin" Value="0,10" />
+        </Style>
+
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="{StaticResource HeaderTextColor}" />
+            <Setter Property="Margin" Value="0,10,0,5" />
+        </Style>
+
+        <Style x:Key="SubHeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="TextColor" Value="{StaticResource SubHeaderTextColor}" />
+            <Setter Property="Margin" Value="0,10,0,5" />
+        </Style>
+        
+        <Style x:Key="CardStyle" TargetType="Frame">
+            <Setter Property="Padding" Value="15" />
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="HasShadow" Value="True" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}" />
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="EditorStyle" TargetType="Editor">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}" />
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}" />
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="HeightRequest" Value="100" />
+        </Style>
+
+        <Style x:Key="PickerStyle" TargetType="Picker">
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="5,10" />
+            <Setter Property="CornerRadius" Value="25" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+
+        <Style x:Key="SmallButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SmallButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="CornerRadius" Value="20" />
+        </Style>
+
+        <Style x:Key="CancelButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource CancelButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="5,10" />
+            <Setter Property="CornerRadius" Value="25" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+
+        <Style x:Key="CardLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="0,2" />
+        </Style>
+        
+        <Style x:Key="OpenButtonStyle" TargetType="Button" BasedOn="{StaticResource SmallButtonStyle}">
+            <Setter Property="BackgroundColor" Value="{StaticResource OpenButtonBackgroundColor}" />
+            <Setter Property="WidthRequest" Value="80" />
+            <Setter Property="HeightRequest" Value="30" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="CornerRadius" Value="15" /> 
+            <Setter Property="HorizontalOptions" Value="End" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+        
+        <Style x:Key="ReviewCardStyle" TargetType="Frame">
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="BackgroundColor" Value="#1E1E1E" />
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="HasShadow" Value="False" />
+            <Setter Property="CornerRadius" Value="5" />
+        </Style>
+
+        <Style x:Key="ReviewUsernameStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <Style x:Key="ReviewCommentStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#CCCCCC" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <Style x:Key="ReviewDateStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#AAAAAA" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <converters:EquipmentListConverter x:Key="EquipmentListConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="20">
+
+                <Label Text="Назва тренування" Style="{StaticResource HeaderLabelStyle}" />
+                <Frame Style="{StaticResource CardStyle}">
+                    <Label Text="{Binding Name}" 
+                           Style="{StaticResource CardLabelStyle}" />
+                </Frame>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <Label Text="Опис тренування" Style="{StaticResource HeaderLabelStyle}" />
+                <Frame Style="{StaticResource CardStyle}">
+                    <Label Text="{Binding Description}" 
+                           Style="{StaticResource CardLabelStyle}" 
+                           LineBreakMode="WordWrap" />
+                </Frame>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <StackLayout Spacing="15">
+                    <StackLayout>
+                        <Label Text="Тривалість (хв)" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding Duration}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Інтенсивність" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding SelectedIntensity}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Рівень підготовки" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding SelectedLevel}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Спалювані калорії (ккал)" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding CaloriesBurned}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Необхідне обладнання" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding AvailableEquipment, Converter={StaticResource EquipmentListConverter}}" 
+                               Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Групи м'язів" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding FormattedSelectedMuscleGroups}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Типи тренування" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding FormattedSelectedWorkoutTypes}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Цілі тренування" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding FormattedSelectedGoals}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Періодичність тренування (раз в)" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding ScheduleInterval}" />
+                                    <Span Text=" " />
+                                    <Span Text="{Binding SelectedScheduleUnit}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <Label Text="Вибрані теги" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Label Text="{Binding FormattedSelectedTags}" Style="{StaticResource CardLabelStyle}" />
+                    </StackLayout>
+                </StackLayout>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <Label Text="Оцініть тренування" Style="{StaticResource HeaderLabelStyle}" />
+
+                <Frame Style="{StaticResource CardStyle}">
+                    <StackLayout Spacing="10">
+                        <Label Text="Оцінка (1-5)" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Picker 
+                            Title="Оберіть оцінку" 
+                            ItemsSource="{Binding RatingOptions}" 
+                            SelectedItem="{Binding SelectedRating}" 
+                            Style="{StaticResource PickerStyle}" />
+
+                        <Label Text="Ваш коментар" Style="{StaticResource SubHeaderLabelStyle}" />
+                        <Editor 
+                            Placeholder="Напишіть ваш коментар..." 
+                            Text="{Binding Comment}" 
+                            Style="{StaticResource EditorStyle}" />
+
+                        <Button 
+                            Text="Відправити відгук" 
+                            Command="{Binding SubmitReviewCommand}" 
+                            Style="{StaticResource ButtonStyle}" 
+                            IsEnabled="{Binding IsReviewValid}" />
+                    </StackLayout>
+                </Frame>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <Label Text="Вправи" Style="{StaticResource HeaderLabelStyle}" />
+                <CollectionView ItemsSource="{Binding Exercises}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource CardStyle}">
+                                <StackLayout Spacing="10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Source="exercise_icon.png" 
+                                               WidthRequest="40" 
+                                               HeightRequest="40" 
+                                               VerticalOptions="Center" 
+                                               Margin="0,0,10,0" />
+
+                                        <Label Text="{Binding Name}"
+                                               Style="{StaticResource HeaderLabelStyle}"
+                                               VerticalOptions="Center" 
+                                               Grid.Column="1" />
+                                    </Grid>
+
+                                    <StackLayout Spacing="5">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Опис: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding Description}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Рівень складності: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding DifficultyLevel}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Тип вправи: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding ExerciseType}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Тривалість (хв): " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding Duration}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Повторення: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding Reps}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Підходи: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding Sets}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Заходи безпеки: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding Precautions}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Необхідне обладнання: " FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                            <Label Text="{Binding SelectedEquipment, Converter={StaticResource EquipmentListConverter}}" TextColor="LightGray" />
+                                        </StackLayout>
+
+                                        <Label Text="Медіафайли:" FontAttributes="Bold" TextColor="{StaticResource HeaderTextColor}" />
+                                        <CollectionView ItemsSource="{Binding MediaDisplayItems}" SelectionMode="None">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Padding="5" ColumnSpacing="10">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Label Text="{Binding DisplayName}"
+                                                               TextColor="LightGray"
+                                                               FontSize="16"
+                                                               VerticalOptions="Center"
+                                                               Grid.Column="1">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer
+                                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ExerciseDetailsViewModel}}, Path=OpenMediaCommand}"
+                                                                    CommandParameter="{Binding Media}" />
+                                                            </Label.GestureRecognizers>
+                                                        </Label>
+
+                                                        <Button Text="Відкрити"
+                                                                Style="{StaticResource OpenButtonStyle}"
+                                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ExerciseDetailsViewModel}}, Path=OpenMediaCommand}"
+                                                                CommandParameter="{Binding Media}"
+                                                                Grid.Column="2" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <Label Text="Відгуки користувачів" Style="{StaticResource HeaderLabelStyle}" />
+
+                <CollectionView ItemsSource="{Binding Reviews}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Style="{StaticResource ReviewCardStyle}">
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                        <Label Text="{Binding Username}" Style="{StaticResource ReviewUsernameStyle}" />
+                                        <Label Text="{Binding Rating, StringFormat='Оцінка: {0}/5'}" Style="{StaticResource ReviewUsernameStyle}" />
+                                    </StackLayout>
+                                    
+                                    <Label Text="{Binding Comment}" Style="{StaticResource ReviewCommentStyle}" LineBreakMode="WordWrap" />
+                                    
+                                    <Label Text="{Binding CreatedAt, StringFormat='{0:dd.MM.yyyy HH:mm}'}" Style="{StaticResource ReviewDateStyle}" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <BoxView Style="{StaticResource DividerStyle}" />
+
+                <Button Text="Назад"
+                        Command="{Binding HostScreen.Router.NavigateBack}"
+                        Style="{StaticResource ButtonStyle}" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:HomeViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    x:Class="TrainingApp.Views.Home.HomePage"
+    Title="Головна"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Frame">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+
+        <Style x:Key="MenuButtonStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="Spacing" Value="5"/>
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+        
+        <Style x:Key="MenuImageButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="WidthRequest" Value="36"/>
+            <Setter Property="HeightRequest" Value="36"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Image Source="home_background.webp"
+                   Aspect="AspectFill"
+                   Opacity="0.3"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand" />
+
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="30" Spacing="20">
+                <Label Text="{Binding WelcomeMessage}"
+                       Style="{StaticResource HeaderLabelStyle}"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center"/>
+                <ImageButton Source="main.png"
+                             WidthRequest="200"
+                             HeightRequest="200"
+                             Aspect="AspectFit"
+                             BackgroundColor="Transparent"
+                             HorizontalOptions="Center"
+                             Command="{Binding NavigateWorkoutsCommand}">
+                </ImageButton>
+            </StackLayout>
+
+            <Grid VerticalOptions="End" Padding="20,10" BackgroundColor="#1E1E1E" HeightRequest="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="home_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateHomeCommand}"/>
+                    <Label Text="Головна"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="workouts_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateWorkoutsCommand}"/>
+                    <Label Text="Тренування"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="2" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="favorites_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateFavoritesCommand}"/>
+                    <Label Text="Підписки"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="3" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="profile_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateProfileCommand}"/>
+                    <Label Text="Профіль"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

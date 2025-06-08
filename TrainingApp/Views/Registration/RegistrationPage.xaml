@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:RegistrationViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels.Registration"
+    x:Class="TrainingApp.Views.Registration.RegistrationPage"
+    Title="Реєстрація"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Визначення кольорів та стилів для темної теми -->
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="GoogleRed">#DB4437</Color>
+        <Color x:Key="GoogleButtonBackground">#FFFFFF</Color>
+        <Color x:Key="GoogleButtonTextColor">#000000</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+
+        <!-- Стиль для кнопок з округленими кутами -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Margin" Value="0,10"/>
+        </Style>
+        
+        <!-- Стиль для кнопки Google -->
+        <Style x:Key="GoogleButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="BackgroundColor" Value="{StaticResource GoogleButtonBackground}" />
+            <Setter Property="TextColor" Value="{StaticResource GoogleButtonTextColor}" />
+            <Setter Property="ImageSource" Value="google_logo.png" />
+            <Setter Property="Padding" Value="10,0" />
+        </Style>
+        
+        <!-- Стиль для полів вводу -->
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+
+        <!-- Стиль для повідомлень про помилки -->
+        <Style x:Key="ErrorLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource ErrorColor}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <!-- Додайте конвертер у ресурсний словник -->
+        <ResourceDictionary>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <!-- Фонове зображення -->
+            <Image Source="registration.webp"
+                   Aspect="AspectFill"
+                   Opacity="0.3"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand" />
+
+            <!-- Основний вміст форми -->
+            <ScrollView>
+                <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+                    
+                    <!-- Загальне повідомлення про помилку -->
+                    <Label Text="{Binding GeneralError}"
+                           Style="{StaticResource ErrorLabelStyle}"
+                           IsVisible="{Binding GeneralError, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                    <Label Text="Створіть акаунт"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    
+                    <!-- Кнопка реєстрації через Google -->
+                    <Button 
+                        Style="{StaticResource GoogleButtonStyle}"
+                        Command="{Binding SignInWithGoogleCommand}"
+                        Text="Реєстрація через Google"
+                        HeightRequest="50"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Center" />
+
+                    <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                        <BoxView HeightRequest="1" WidthRequest="100" BackgroundColor="{StaticResource DividerColor}" VerticalOptions="Center"/>
+                        <Label Text="АБО" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               Margin="10,0"
+                               TextColor="#AAAAAA" 
+                               FontSize="14"/>
+                        <BoxView HeightRequest="1" WidthRequest="100" BackgroundColor="{StaticResource DividerColor}" VerticalOptions="Center"/>
+                    </StackLayout>
+                    
+                    <Entry Placeholder="Ім'я"
+                           Text="{Binding FirstName}"
+                           Style="{StaticResource EntryStyle}" />
+                    <Entry Placeholder="Прізвище"
+                           Text="{Binding LastName}"
+                           Style="{StaticResource EntryStyle}" />
+                    <Entry Placeholder="Електронна пошта"
+                           Keyboard="Email"
+                           Text="{Binding Email}"
+                           Style="{StaticResource EntryStyle}" />
+                    <Entry Placeholder="Пароль"
+                           IsPassword="True"
+                           Text="{Binding Password}"
+                           Style="{StaticResource EntryStyle}" />
+                    <!-- Повідомлення про помилку для Пароля -->
+                    <Label Text="{Binding PasswordError}"
+                           Style="{StaticResource ErrorLabelStyle}"
+                           IsVisible="{Binding PasswordError, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                    <!-- Кнопка "Далі" -->
+                    <Button Text="Далі"
+                            Style="{StaticResource RoundedButtonStyle}"
+                            BackgroundColor="{StaticResource PrimaryColor}"
+                            Command="{Binding ContinueCommand}" />
+                    
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Індикатор стану -->
+            <Grid IsVisible="{Binding IsBusy}">
+                <BoxView Color="#121212" />
+                <ActivityIndicator 
+                    IsRunning="{Binding IsBusy}" 
+                    IsVisible="{Binding IsBusy}" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Color="White" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

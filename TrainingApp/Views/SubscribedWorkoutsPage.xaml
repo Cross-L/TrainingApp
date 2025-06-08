@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:SubscribedWorkoutsViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    x:Class="TrainingApp.Views.SubscribedWorkoutsPage"
+    Title="Мої підписки"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Цвета -->
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+        <Color x:Key="ButtonTextColor">#FFFFFF</Color>
+        <Color x:Key="CardBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="ButtonBackgroundColor">#4CAF50</Color>
+        <Color x:Key="SmallButtonBackgroundColor">#555555</Color>
+
+        <!-- Стили -->
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="Margin" Value="0,10,0,5" />
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Frame">
+            <Setter Property="Padding" Value="15" />
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="HasShadow" Value="True" />
+        </Style>
+
+        <Style x:Key="MenuButtonStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="Spacing" Value="5" />
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}" />
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="Margin" Value="0,5" />
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="5,0" />
+        </Style>
+
+        <Style x:Key="SmallButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SmallButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style x:Key="MenuIconStyle" TargetType="Image">
+            <Setter Property="WidthRequest" Value="36" />
+            <Setter Property="HeightRequest" Value="36" />
+            <Setter Property="Aspect" Value="AspectFit" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+
+        <Style x:Key="MenuLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="End" />
+        </Style>
+
+        <Style x:Key="SubscribeButtonStyle" TargetType="Button" BasedOn="{StaticResource SmallButtonStyle}">
+            <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+        </Style>
+
+        <Style x:Key="MenuImageButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="WidthRequest" Value="36" />
+            <Setter Property="HeightRequest" Value="36" />
+            <Setter Property="Aspect" Value="AspectFit" />
+        </Style>
+
+        <!-- Стиль для назв характеристик -->
+        <Style x:Key="CharacteristicNameStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="LightGray" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+
+        <!-- Стиль для значень характеристик -->
+        <Style x:Key="CharacteristicValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="LightGray" />
+        </Style>
+
+        <!-- Стиль для имени автора -->
+        <Style x:Key="AuthorNameStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontAttributes" Value="Italic" />
+            <Setter Property="TextColor" Value="LightBlue" />
+            <Setter Property="Margin" Value="0,2,0,0" />
+        </Style>
+
+        <!-- Конвертер BoolToArrowConverter -->
+        <converters:BoolToArrowConverter x:Key="BoolToArrowConverter" />
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout Padding="20" Spacing="20">
+                    <!-- Пошук -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Entry Placeholder="Пошук тренувань..."
+                                   Style="{StaticResource EntryStyle}"
+                                   Text="{Binding SearchQuery}" />
+                            <Image Source="search_icon.png"
+                                   WidthRequest="30"
+                                   HeightRequest="30"
+                                   Aspect="AspectFit"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="End"
+                                   Margin="0,0,10,0" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Підписані тренування -->
+                    <CollectionView ItemsSource="{Binding SubscribedWorkouts}"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Style="{StaticResource CardStyle}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Назва Тренування -->
+                                        <Label Text="{Binding Workout.Name}"
+                                               FontSize="18"
+                                               TextColor="White"
+                                               Grid.Row="0"
+                                               Grid.Column="0" />
+
+                                        <!-- Ім'я автора -->
+                                        <Label Text="{Binding Workout.AuthorFullName}"
+                                               Style="{StaticResource AuthorNameStyle}"
+                                               Grid.Row="1"
+                                               Grid.Column="0">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoToAuthorProfileCommand}"
+                                                    CommandParameter="{Binding Workout.AuthorId}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+
+                                        <!-- Середня Оцінка -->
+                                        <StackLayout Orientation="Horizontal" Spacing="8" VerticalOptions="Center"
+                                                    Grid.Row="0" Grid.Column="1">
+                                            <Image Source="star_icon.png"
+                                                   WidthRequest="24"
+                                                   HeightRequest="24"
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="Start" />
+                                            <Label Text="{Binding Workout.AverageRating, StringFormat='{0:0.00}', TargetNullValue='0.00'}"
+                                                   Style="{StaticResource CharacteristicValueStyle}"
+                                                   FontSize="14"
+                                                   VerticalOptions="Center" />
+                                        </StackLayout>
+
+                                        <!-- Ціль Тренування -->
+                                        <Label Text="{Binding Workout.Goals, StringFormat='Ціль: {0}'}"
+                                               FontSize="14"
+                                               TextColor="Gray"
+                                               Grid.Row="2"
+                                               Grid.Column="0"
+                                               Grid.ColumnSpan="2"
+                                               Margin="0,10,0,0" />
+
+                                        <!-- Характеристики -->
+                                        <StackLayout Orientation="Vertical" Spacing="5" Margin="0,10,0,0"
+                                                     Grid.Row="3"
+                                                     Grid.Column="0"
+                                                     Grid.ColumnSpan="2">
+                                            <!-- Горизонтальний рядок для Тривалість та Інтенсивність -->
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="Тривалість:" 
+                                                       Style="{StaticResource CharacteristicNameStyle}" />
+                                                <Label Text="{Binding Workout.Duration, StringFormat='{0} хв'}"
+                                                       Style="{StaticResource CharacteristicValueStyle}" />
+
+                                                <Label Text="Інтенсивність:" 
+                                                       Style="{StaticResource CharacteristicNameStyle}" 
+                                                       Margin="10,0,0,0"/>
+                                                <Label Text="{Binding Workout.Intensity}"
+                                                       Style="{StaticResource CharacteristicValueStyle}" />
+                                            </StackLayout>
+
+                                            <!-- Окремий рядок для Обладнання -->
+                                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                                <Label Text="Обладнання:" 
+                                                       Style="{StaticResource CharacteristicNameStyle}" />
+                                                <Label Text="{Binding Workout.Equipment}"
+                                                       Style="{StaticResource CharacteristicValueStyle}"
+                                                       LineBreakMode="WordWrap" 
+                                                       HorizontalOptions="StartAndExpand" />
+                                            </StackLayout>
+
+                                            <!-- Теги -->
+                                            <StackLayout Margin="0,5,0,0">
+                                                <Label Text="Теги:" 
+                                                       Style="{StaticResource CharacteristicNameStyle}" />
+                                                <Label Text="{Binding Workout.Tags}"
+                                                       Style="{StaticResource CharacteristicValueStyle}"
+                                                       TextColor="LightBlue" />
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                        <!-- Кнопки Відписатися та Переглянути -->
+                                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,10,0,0"
+                                                     Grid.Row="4"
+                                                     Grid.Column="0"
+                                                     Grid.ColumnSpan="2"
+                                                     HorizontalOptions="Start">
+                                            <Button Text="Відписатися"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscribedWorkoutsViewModel}}, Path=UnsubscribeWorkoutCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource SubscribeButtonStyle}" />
+
+                                            <!-- Кнопка Переглянути -->
+                                            <Button Text="Переглянути"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscribedWorkoutsViewModel}}, Path=ViewWorkoutCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    Style="{StaticResource SmallButtonStyle}" />
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Нижнє Меню -->
+            <Grid VerticalOptions="End" Padding="20,10" BackgroundColor="#1E1E1E" HeightRequest="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center"
+                             HorizontalOptions="Center">
+                    <ImageButton Source="home_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateHomeCommand}" />
+                    <Label Text="Головна"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center"
+                             HorizontalOptions="Center">
+                    <ImageButton Source="workouts_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateWorkoutsCommand}" />
+                    <Label Text="Тренування"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+
+                <StackLayout Grid.Column="2" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center"
+                             HorizontalOptions="Center">
+                    <ImageButton Source="favorites_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateFavoritesCommand}" />
+                    <Label Text="Підписки"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+
+                <StackLayout Grid.Column="3" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center"
+                             HorizontalOptions="Center">
+                    <ImageButton Source="profile_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateProfileCommand}" />
+                    <Label Text="Профіль"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:RegistrationContinuationViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels.Registration"
+    x:Class="TrainingApp.Views.Registration.RegistrationContinuationPage"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Ваші ресурси залишаються без змін -->
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="GoogleRed">#DB4437</Color>
+        <Color x:Key="GoogleButtonBackground">#FFFFFF</Color>
+        <Color x:Key="GoogleButtonTextColor">#000000</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Margin" Value="0,10"/>
+        </Style>
+        
+        <Style x:Key="GoogleButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="BackgroundColor" Value="{StaticResource GoogleButtonBackground}" />
+            <Setter Property="TextColor" Value="{StaticResource GoogleButtonTextColor}" />
+            <Setter Property="ImageSource" Value="google_logo.png" />
+            <Setter Property="Padding" Value="10,0" />
+        </Style>
+        
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,0"/>
+        </Style>
+
+        <Style x:Key="PickerStyle" TargetType="Picker">
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,0"/>
+        </Style>
+        
+        <Style x:Key="ErrorLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource ErrorColor}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        
+        <ResourceDictionary>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+            <converters:GoalsSelectedConverter x:Key="GoalsSelectedConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid>
+            <!-- Фонове зображення -->
+            <Image Source="background_registration.webp"
+                   Aspect="AspectFill"
+                   Opacity="0.3"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand" />
+            
+            <ScrollView>
+                <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+                    
+                    <!-- Заголовок сторінки -->
+                    <Label Text="Додаткова інформація"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    
+                    <!-- Вибір статі -->
+                    <Picker Title="Стать"
+                            ItemsSource="{Binding Genders}"
+                            SelectedItem="{Binding SelectedGender}"
+                            Style="{StaticResource PickerStyle}" />
+                    
+                    <!-- Вік -->
+                    <Entry Placeholder="Вік"
+                           Keyboard="Numeric"
+                           Text="{Binding Age}"
+                           Style="{StaticResource EntryStyle}" />
+                     
+                    <!-- Вага (кг) -->
+                    <Entry Placeholder="Вага (кг)"
+                           Keyboard="Numeric"
+                           Text="{Binding Weight}"
+                           Style="{StaticResource EntryStyle}" />
+                   
+                    <!-- Зріст (см) -->
+                    <Entry Placeholder="Зріст (см)"
+                           Keyboard="Numeric"
+                           Text="{Binding Height}"
+                           Style="{StaticResource EntryStyle}" />
+                    
+                    <!-- Рівень фізичної активності -->
+                    <Picker Title="Рівень фізичної активності"
+                            ItemsSource="{Binding ActivityLevels}"
+                            SelectedItem="{Binding SelectedActivityLevel}"
+                            Style="{StaticResource PickerStyle}" />
+                    
+                    <!-- Вибір типу тренування -->
+                    <Picker Title="Бажаний тип тренування"
+                            ItemsSource="{Binding TrainingTypes}"
+                            SelectedItem="{Binding SelectedTrainingType}"
+                            Style="{StaticResource PickerStyle}" />
+                    
+                    <Label Text="Ваші цілі"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Start"/>
+                    <CollectionView ItemsSource="{Binding Goals}"
+                                    Margin="0,0,0,0">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="2"
+                                             HorizontalItemSpacing="0"
+                                             VerticalItemSpacing="0"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto, *" Padding="5">
+                                    <CheckBox IsChecked="{Binding IsSelected}"
+                                              VerticalOptions="Center"
+                                              Grid.Column="0"/>
+                                    <Label Text="{Binding Name}" 
+                                           FontSize="16" 
+                                           TextColor="White" 
+                                           VerticalOptions="Center"
+                                           Margin="0,0,0,0"
+                                           LineBreakMode="WordWrap"
+                                           HorizontalOptions="FillAndExpand"
+                                           Grid.Column="1"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Label Text="{Binding GeneralError}"
+                           Style="{StaticResource ErrorLabelStyle}"
+                           IsVisible="{Binding GeneralError, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                    <Button Text="Завершити реєстрацію"
+                            Style="{StaticResource RoundedButtonStyle}"
+                            BackgroundColor="{StaticResource PrimaryColor}"
+                            Command="{Binding CompleteRegistrationCommand}" />
+                    
+                </StackLayout>
+            </ScrollView>
+            
+            <Grid IsVisible="{Binding IsBusy}">
+                <BoxView Color="#121212" /> 
+                <ActivityIndicator 
+                    IsRunning="{Binding IsBusy}" 
+                    IsVisible="{Binding IsBusy}" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Color="White" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

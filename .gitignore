@@ -1,0 +1,22 @@
+# Rider
+.idea/
+*.sln.DotSettings
+*.sln.DotSettings.user
+
+# Visual Studio / Build output
+bin/
+obj/
+*.user
+*.suo
+
+# NuGet
+packages/
+*.nupkg
+
+# Database files
+*.mdf
+*.ldf
+
+# Other
+Debug/
+Release/

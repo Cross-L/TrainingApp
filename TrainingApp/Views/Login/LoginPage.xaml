@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:LoginViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels.Login"
+    x:Class="TrainingApp.Views.Login.LoginPage"
+    Title="Вхід"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Використовуємо ті ж ресурси, що й у сторінці реєстрації -->
+        <Color x:Key="PrimaryColor">#4CAF50</Color> <!-- Світло-зелений колір для кнопок -->
+        <Color x:Key="GoogleRed">#DB4437</Color>
+        <Color x:Key="GoogleButtonBackground">#FFFFFF</Color> <!-- Білий колір для кнопки Google -->
+        <Color x:Key="GoogleButtonTextColor">#000000</Color> <!-- Чорний колір тексту для кнопки Google -->
+        <Color x:Key="DividerColor">#444444</Color> <!-- Більш темний роздільник -->
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color> <!-- Темний фон для полів вводу -->
+        <Color x:Key="EntryTextColor">#FFFFFF</Color> <!-- Білий текст у полях вводу -->
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color> <!-- Світло-сірий колір плейсхолдера -->
+        <Color x:Key="ErrorColor">#FF4444</Color> <!-- Червоний для помилок -->
+
+        <!-- Стиль для кнопок з округленими кутами -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Margin" Value="0,10"/>
+        </Style>
+        
+        <!-- Стиль для кнопки Google -->
+        <Style x:Key="GoogleButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="BackgroundColor" Value="{StaticResource GoogleButtonBackground}" />
+            <Setter Property="TextColor" Value="{StaticResource GoogleButtonTextColor}" />
+            <Setter Property="ImageSource" Value="google_logo.png" />
+            <Setter Property="Padding" Value="10,0" />
+        </Style>
+        
+        <!-- Стиль для полів вводу -->
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+
+        <!-- Стиль для повідомлень про помилки -->
+        <Style x:Key="ErrorLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource ErrorColor}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <!-- Додайте конвертер у ресурсний словник -->
+        <ResourceDictionary>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+                    
+                    <Label Text="Вхід до акаунту"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+
+                    <!-- Логотип або зображення входу -->
+                    <Frame BackgroundColor="#1E1E1E"
+                           WidthRequest="200"
+                           HeightRequest="200"
+                           CornerRadius="100"
+                           HasShadow="True"
+                           BorderColor="Transparent"
+                           HorizontalOptions="Center"
+                           Padding="0">
+                        <Image Source="registration.webp"
+                               Aspect="AspectFill"
+                               WidthRequest="200"
+                               HeightRequest="200">
+                            <Image.Clip>
+                                <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100" />
+                            </Image.Clip>
+                        </Image>
+                    </Frame>
+
+                    <!-- Кнопка входу через Google -->
+                    <Button 
+                        Style="{StaticResource GoogleButtonStyle}"
+                        Command="{Binding SignInWithGoogleCommand}"
+                        Text="Вхід через Google"
+                        HeightRequest="50"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Center" />
+
+                    <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                        <BoxView HeightRequest="1" WidthRequest="100" BackgroundColor="{StaticResource DividerColor}" VerticalOptions="Center"/>
+                        <Label Text="АБО" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center" 
+                               Margin="10,0"
+                               TextColor="#AAAAAA" 
+                               FontSize="14"/>
+                        <BoxView HeightRequest="1" WidthRequest="100" BackgroundColor="{StaticResource DividerColor}" VerticalOptions="Center"/>
+                    </StackLayout>
+                    
+                    <Entry Placeholder="Електронна пошта"
+                           Keyboard="Email"
+                           Text="{Binding Email}"
+                           Style="{StaticResource EntryStyle}" />
+                    
+                    <Entry Placeholder="Пароль"
+                           IsPassword="True"
+                           Text="{Binding Password}"
+                           Style="{StaticResource EntryStyle}" />
+                    <!-- Повідомлення про помилку для Пароля -->
+                    <Label Text="{Binding ErrorMessage}"
+                           Style="{StaticResource ErrorLabelStyle}"
+                           IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                    <!-- Кнопка "Увійти" -->
+                    <Button Text="Увійти"
+                            Style="{StaticResource RoundedButtonStyle}"
+                            BackgroundColor="{StaticResource PrimaryColor}"
+                            Command="{Binding LoginCommand}" />
+
+                    <!-- Перехід до реєстрації -->
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                        <Label Text="Ще немає акаунту? " 
+                               TextColor="#AAAAAA" 
+                               FontSize="14"/>
+                        <Label Text="Зареєструйтесь" 
+                               TextColor="{StaticResource PrimaryColor}" 
+                               FontSize="14">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NavigateToRegistrationCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Індикатор стану -->
+            <Grid IsVisible="{Binding IsBusy}">
+                <BoxView Color="#121212" /> 
+                <ActivityIndicator 
+                    IsRunning="{Binding IsBusy}" 
+                    IsVisible="{Binding IsBusy}" 
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Color="White" />
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>

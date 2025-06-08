@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<reactiveui:ReactiveContentPage
+    x:TypeArguments="viewmodels:ProfileViewModel"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:reactiveui="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+    xmlns:viewmodels="clr-namespace:TrainingApp.ViewModels"
+    xmlns:converters="clr-namespace:TrainingApp.Converters"
+    x:Class="TrainingApp.Views.ProfilePage"
+    BackgroundColor="#121212">
+
+    <ContentPage.Resources>
+        <!-- Кольори -->
+        <Color x:Key="PrimaryColor">#4CAF50</Color>
+        <Color x:Key="DividerColor">#444444</Color>
+        <Color x:Key="EntryBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="EntryTextColor">#FFFFFF</Color>
+        <Color x:Key="PlaceholderColor">#AAAAAA</Color>
+        <Color x:Key="ErrorColor">#FF4444</Color>
+        <Color x:Key="ButtonTextColor">#FFFFFF</Color>
+        <Color x:Key="CardBackgroundColor">#1E1E1E</Color>
+        <Color x:Key="ButtonBackgroundColor">#4CAF50</Color>
+        <Color x:Key="SmallButtonBackgroundColor">#555555</Color>
+
+        <!-- Стилі -->
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="Margin" Value="0,10,0,5"/>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Frame">
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="HasShadow" Value="True"/>
+        </Style>
+
+        <Style x:Key="MenuButtonStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="Spacing" Value="5"/>
+        </Style>
+
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
+            <Setter Property="TextColor" Value="{StaticResource EntryTextColor}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource EntryBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+        
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Margin" Value="5,0"/>
+        </Style>
+
+        <Style x:Key="SmallButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SmallButtonBackgroundColor}" />
+            <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+            <Setter Property="HeightRequest" Value="40" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
+
+        <Style x:Key="MenuImageButtonStyle" TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="WidthRequest" Value="36"/>
+            <Setter Property="HeightRequest" Value="36"/>
+            <Setter Property="Aspect" Value="AspectFit"/>
+        </Style>
+
+        <!-- Новий стиль для централізованих Label -->
+        <Style x:Key="CenteredLabelStyle" TargetType="Label">
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout Padding="20" Spacing="20">
+                    <!-- Заголовок профілю -->
+                    <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Start">
+                        <Frame 
+                            CornerRadius="75" 
+                            HeightRequest="150" 
+                            WidthRequest="150" 
+                            BackgroundColor="{StaticResource CardBackgroundColor}" 
+                            HasShadow="True" 
+                            Padding="0">
+                            <Image 
+                                Source="{Binding ProfileImageUrl}" 
+                                Aspect="AspectFill"
+                                HorizontalOptions="Fill" 
+                                VerticalOptions="Fill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding UploadProfileImageCommand}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+
+                        <StackLayout VerticalOptions="Center">
+                            <Label Text="{Binding FullName}" Style="{StaticResource HeaderLabelStyle}" HorizontalOptions="Start" />
+                            <Label Text="{Binding Email}" TextColor="Gray" FontSize="14" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!-- Кнопка завантаження фото профілю -->
+                    <Button Text="Змінити фото"
+                            Command="{Binding UploadProfileImageCommand}"
+                            Style="{StaticResource ButtonStyle}"
+                            HorizontalOptions="Start"
+                            IsVisible="{Binding IsOwnProfile}" />
+                    
+
+                    <!-- Зміна пароля (умовно) -->
+                    <StackLayout IsVisible="{Binding CanChangePassword}" Spacing="10">
+                        <Label Text="Змінити пароль" Style="{StaticResource HeaderLabelStyle}" />
+                        <Entry Placeholder="Новий пароль"
+                               Style="{StaticResource EntryStyle}"
+                               IsPassword="True"
+                               Text="{Binding NewPassword}" />
+                        <Entry Placeholder="Підтвердіть пароль"
+                               Style="{StaticResource EntryStyle}"
+                               IsPassword="True"
+                               Text="{Binding ConfirmPassword}" />
+                        <Button Text="Зберегти пароль"
+                                Command="{Binding ChangePasswordCommand}"
+                                Style="{StaticResource ButtonStyle}" />
+                    </StackLayout>
+
+                    <!-- Статистика акаунту -->
+                    <Label Text="Статистика акаунту" Style="{StaticResource HeaderLabelStyle}" />
+
+                    <Grid ColumnSpacing="10" RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Кількість створених тренувань -->
+                        <Frame Grid.Row="0" Grid.Column="0" Style="{StaticResource CardStyle}">
+                            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="{Binding CreatedWorkoutsCount}" 
+                                       FontSize="24" 
+                                       TextColor="{StaticResource PrimaryColor}" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                                <Label Text="Створено тренувань" 
+                                       TextColor="White" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                            </StackLayout>
+                        </Frame>
+
+                        <!-- Кількість обраних тренувань -->
+                        <Frame Grid.Row="0" Grid.Column="1" Style="{StaticResource CardStyle}">
+                            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="{Binding SubscribeWorkoutsCount}" 
+                                       FontSize="24" 
+                                       TextColor="{StaticResource PrimaryColor}" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                                <Label Text="Слідкувачі" 
+                                       TextColor="White" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                            </StackLayout>
+                        </Frame>
+
+                        <!-- Середня оцінка тренувань -->
+                        <Frame Grid.Row="0" Grid.Column="2" Style="{StaticResource CardStyle}">
+                            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label Text="{Binding AverageWorkoutRating, StringFormat='{0:F2}'}" 
+                                       FontSize="24" 
+                                       TextColor="{StaticResource PrimaryColor}" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                                <Label Text="Середня оцінка" 
+                                       TextColor="White" 
+                                       Style="{StaticResource CenteredLabelStyle}" />
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Нижнє меню навігації -->
+            <Grid VerticalOptions="End" Padding="20,10" BackgroundColor="#1E1E1E" HeightRequest="80">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackLayout Grid.Column="0" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="home_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateHomeCommand}"/>
+                    <Label Text="Головна"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="workouts_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateWorkoutsCommand}"/>
+                    <Label Text="Тренування"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="2" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="favorites_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateFavoritesCommand}"/>
+                    <Label Text="Підписки"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="3" Style="{StaticResource MenuButtonStyle}" VerticalOptions="Center" HorizontalOptions="Center">
+                    <ImageButton Source="profile_icon.png"
+                                 Style="{StaticResource MenuImageButtonStyle}"
+                                 Command="{Binding NavigateProfileCommand}"/>
+                    <Label Text="Профіль"
+                           TextColor="White"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</reactiveui:ReactiveContentPage>
