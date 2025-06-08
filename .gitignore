@@ -20,3 +20,4 @@ packages/
 # Other
 Debug/
 Release/
+TrainingApp/Resources/Files/service_account.json
