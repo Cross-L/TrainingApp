@@ -21,3 +21,4 @@ packages/
 Debug/
 Release/
 TrainingApp/Resources/Files/service_account.json
+TrainingApp/Resources/Files/appsettings.json

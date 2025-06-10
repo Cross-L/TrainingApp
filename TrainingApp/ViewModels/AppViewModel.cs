@@ -7,7 +7,6 @@ namespace TrainingApp.ViewModels;
 public class AppViewModel : ReactiveObject, IScreen
 {
     public RoutingState Router { get; }
-
     
     public AppViewModel(ApplicationDbContext dbContext)
     {
